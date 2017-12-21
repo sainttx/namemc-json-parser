@@ -1,14 +1,19 @@
-
 var express = require("express")
 var cheerio = require("cheerio")
 var morgan = require("morgan")
 var cloudscraper = require("cloudscraper")
+var cache = require("js-cache")
 
-const app = express()
+var app = express()
 app.use(morgan("common")) // :method :url :status :response-time ms - :res[content-length]
 
 app.get("/name/:id", (req, res) => {
-  var name = req.params.id
+  var name = req.params.id.toLowerCase()
+
+  var cached = cache.get(name)
+  if (cached != null) {
+    return res.status(200).send(cached)
+  }
 
   cloudscraper.get("https://namemc.com/name/" + name, function (err, resp, body) {
     if (err) {
@@ -41,6 +46,8 @@ app.get("/name/:id", (req, res) => {
     if (json.length == 0) {
       return res.status(400).send({ error: "Name has never been used"})
     }
+
+    cache.set(name, json, 6e5)
     return res.status(200).send(json)
   })
 })

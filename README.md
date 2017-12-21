@@ -4,7 +4,8 @@ An Express.js applet that mirrors NameMC profiles and outputs raw JSON represent
 
 ### Usage
 JSON representations are available at `localhost:3000/name/:id`. For example, replacing `:id` with `Thug` will yield the following output:
-`[  
+```
+[  
     {  
         "uuid": "8cf50b78-22d5-4b71-840a-f49f311f03fb",
         "history": [  
@@ -25,4 +26,5 @@ JSON representations are available at `localhost:3000/name/:id`. For example, re
             }
         ]
     }
-]`
+]
+```
